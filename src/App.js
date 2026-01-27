@@ -8,14 +8,14 @@ import SellPage from "./pages/SellPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import CategoryBar from "./components/CategoryBar";
+
 
 
 function App() {
   return (
     <BrowserRouter>
       <Header />
-      <CategoryBar />
+
       <main className="container" style={{ padding: "18px 0 26px" }}>
         <Routes>
           <Route path="/" element={<HomePage />} />
