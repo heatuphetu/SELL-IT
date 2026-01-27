@@ -1,0 +1,228 @@
+/* ===== SellIt Global Styles ===== */
+
+:root {
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --brand: #111827;
+  --brandText: #ffffff;
+  --shadow: 0 10px 25px rgba(17, 24, 39, 0.08);
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* Links */
+a {
+  color: var(--text);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+/* Basic layout helpers */
+.container {
+  width: min(1100px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.sectionTitle {
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 18px 0;
+}
+
+/* Header */
+.siteHeader {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.brandTitle {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.brandTagline {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.navBar {
+  border-top: 1px solid var(--border);
+  background: #fff;
+}
+
+.navInner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+}
+
+.navSpacer { flex: 1; }
+
+.navLink {
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+.navLink:hover {
+  background: #f3f4f6;
+  text-decoration: none;
+}
+
+/* Search */
+.searchForm {
+  display: flex;
+  gap: 10px;
+  width: min(560px, 100%);
+}
+
+.searchInput {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  outline: none;
+}
+.searchInput:focus {
+  border-color: #c7cdd6;
+  box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.08);
+}
+
+.btn {
+  padding: 10px 14px;
+  border: 1px solid var(--brand);
+  border-radius: 12px;
+  background: var(--brand);
+  color: var(--brandText);
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn:hover { opacity: 0.92; }
+
+/* Main grid */
+.pageGrid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 16px;
+  padding: 18px 0 26px;
+}
+
+/* Categories */
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.catItem {
+  padding: 10px 10px;
+  border-radius: 12px;
+  color: var(--text);
+}
+.catItem:hover {
+  background: #f3f4f6;
+}
+
+/* Listings */
+.listingGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.listingCard {
+  padding: 14px;
+}
+
+.listingTitle {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.meta {
+  margin: 6px 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 12px;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--muted);
+}
+
+.cardActions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Footer */
+.siteFooter {
+  border-top: 1px solid var(--border);
+  background: #fff;
+  padding: 16px 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .pageGrid {
+    grid-template-columns: 1fr;
+  }
+  .listingGrid {
+    grid-template-columns: 1fr;
+  }
+  .headerTop {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .searchForm { width: 100%; }
+}
