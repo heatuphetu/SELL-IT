@@ -1,109 +1,121 @@
 import { useEffect, useMemo, useState } from "react";
 
-export default function Hero() {
+import imgElectronics from "../assets/hero/electronics.jpg";
+import imgFashion from "../assets/hero/fashion.jpg";
+import imgHome from "../assets/hero/home.jpg";
+import imgCards from "../assets/hero/cards.jpg";
+
+export default function Hero({ onSelectCategory, onJumpToListings }) {
   const slides = useMemo(
     () => [
       {
         id: "electronics",
-        title: "Complete your set. Your way.",
-        desc: "Choose how you collect items from your favorite categories.",
-        cta: "Explore deals",
-        badge: "Electronics",
-      },
-      {
-        id: "home-garden",
-        title: "Refresh your space for less.",
-        desc: "Home & Garden picks that ship fast or pickup locally.",
-        cta: "Shop Home & Garden",
-        badge: "Home & Garden",
+        category: "Electronics",
+        title: "Upgrade your tech for less.",
+        desc: "Phones, laptops, accessories — deals from local sellers.",
+        cta: "Shop Electronics",
+        img: imgElectronics,
       },
       {
         id: "fashion",
+        category: "Fashion",
         title: "New fits. Better prices.",
-        desc: "Trending fashion deals from trusted sellers.",
+        desc: "Trending styles — buy now or make an offer.",
         cta: "Shop Fashion",
-        badge: "Fashion",
+        img: imgFashion,
+      },
+      {
+        id: "home-garden",
+        category: "Home & Garden",
+        title: "Make your space feel new.",
+        desc: "Furniture, decor, tools — shipped or pickup nearby.",
+        cta: "Shop Home & Garden",
+        img: imgHome,
       },
       {
         id: "trading-cards",
-        title: "Chase the next pull.",
-        desc: "Find singles and sealed packs across top series.",
-        cta: "Browse Trading Cards",
-        badge: "Trading Cards",
+        category: "Trading Cards",
+        title: "Pull your next favorite card.",
+        desc: "Singles and sealed packs across top series.",
+        cta: "Shop Trading Cards",
+        img: imgCards,
       },
     ],
     []
   );
 
   const [index, setIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const [paused, setPaused] = useState(false);
 
-  // Auto-advance every 2 seconds
   useEffect(() => {
-    if (isPaused) return;
+    if (paused) return;
     const t = setInterval(() => {
-      setIndex((prev) => (prev + 1) % slides.length);
-    }, 2000);
+      setIndex((p) => (p + 1) % slides.length);
+    }, 3500);
     return () => clearInterval(t);
-  }, [isPaused, slides.length]);
+  }, [paused, slides.length]);
 
   const current = slides[index];
 
-  const goTo = (i) => {
-    setIndex(i);
-    setIsPaused(true);
-    // resume after user interaction (optional)
-    setTimeout(() => setIsPaused(false), 6000);
-  };
+  const goTo = (i) => setIndex(i);
+  const next = () => setIndex((p) => (p + 1) % slides.length);
+  const prev = () => setIndex((p) => (p - 1 + slides.length) % slides.length);
 
-  const next = () => goTo((index + 1) % slides.length);
-  const prev = () => goTo((index - 1 + slides.length) % slides.length);
+  const handleCTA = () => {
+    onSelectCategory?.(current.category);
+    onJumpToListings?.();
+  };
 
   return (
     <section
-      className="hero card"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
+      className="heroReal"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
     >
-      <div className="heroLeft">
-        <div className="heroImgBox">
-          <div className="heroImgPlaceholder">{current.badge}</div>
+      <div className="heroRealInner">
+        <div className="heroRealText">
+          <div className="heroTag">{current.category}</div>
+          <h1 className="heroRealTitle">{current.title}</h1>
+          <p className="heroRealDesc">{current.desc}</p>
+
+          <button className="btn heroRealBtn" type="button" onClick={handleCTA}>
+            {current.cta}
+          </button>
+        </div>
+
+        <div className="heroRealMedia">
+          <img className="heroImg" src={current.img} alt={current.category} />
         </div>
       </div>
 
-      <div className="heroRight">
-        <div className="heroBadge">{current.badge}</div>
+      <div className="heroRealBottom">
+        <div className="heroDots">
+          {slides.map((s, i) => (
+            <button
+              key={s.id}
+              type="button"
+              className={`heroDot ${i === index ? "active" : ""}`}
+              onClick={() => goTo(i)}
+              aria-label={`Go to ${s.category}`}
+            />
+          ))}
+        </div>
 
-        <h2 className="heroTitle">{current.title}</h2>
-        <p className="heroDesc">{current.desc}</p>
-
-        <button className="btn heroBtn" type="button">
-          {current.cta}
-        </button>
-
-        <div className="heroBottom">
-          <div className="heroDots" aria-label="carousel dots">
-            {slides.map((s, i) => (
-              <button
-                key={s.id}
-                className={`dotBtn ${i === index ? "active" : ""}`}
-                type="button"
-                onClick={() => goTo(i)}
-                aria-label={`Go to ${s.badge}`}
-              >
-                <span className="dot" />
-              </button>
-            ))}
-          </div>
-
-          <div className="heroControls">
-            <button className="heroCtrl" type="button" onClick={prev} aria-label="Previous">
-              ‹
-            </button>
-            <button className="heroCtrl" type="button" onClick={next} aria-label="Next">
-              ›
-            </button>
-          </div>
+        <div className="heroControls">
+          <button className="heroCtrlBtn" type="button" onClick={prev} aria-label="Previous">
+            ‹
+          </button>
+          <button className="heroCtrlBtn" type="button" onClick={next} aria-label="Next">
+            ›
+          </button>
+          <button
+            className="heroCtrlBtn"
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            aria-label={paused ? "Play" : "Pause"}
+          >
+            {paused ? "▶" : "Ⅱ"}
+          </button>
         </div>
       </div>
     </section>

@@ -1,15 +1,15 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import Hero from "../components/Hero";
 import FeatureRow from "../components/FeatureRow";
 import PromoStrip from "../components/PromoStrip";
 import Listings from "../components/Listings";
-import CategoryBar from "../components/CategoryBar";
 
 import { listings as allListings } from "../data/listings";
 
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const listingsRef = useRef(null);
 
   const filteredListings = useMemo(() => {
     if (selectedCategory === "All") return allListings;
@@ -18,16 +18,26 @@ export default function HomePage() {
     );
   }, [selectedCategory]);
 
+  const jumpToListings = () => {
+    listingsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div className="container">
-      <CategoryBar selected={selectedCategory} onSelect={setSelectedCategory} />
+      <Hero
+        onSelectCategory={setSelectedCategory}
+        onJumpToListings={jumpToListings}
+      />
 
-      <Hero selectedCategory={selectedCategory} />
-
-      <Listings listings={filteredListings} selectedCategory={selectedCategory} />
+      <div ref={listingsRef}>
+        <Listings
+          listings={filteredListings}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+        />
+      </div>
 
       <FeatureRow onSelectCategory={setSelectedCategory} />
-
       <PromoStrip />
     </div>
   );

@@ -1,12 +1,36 @@
-import { listings as defaultListings } from "../data/listings";
+import { categories } from "../data/categories";
 
-export default function Listings({ listings = defaultListings, selectedCategory = "All" }) {
+export default function Listings({
+  listings = [],
+  selectedCategory = "All",
+  onSelectCategory,
+}) {
+  const tabs = ["All", "Saved", "Top Auctions", ...categories];
+
   return (
-    <section className="card" style={{ padding: 14 }}>
-      <h2 className="sectionTitle">
-        Featured Listings {selectedCategory !== "All" ? `— ${selectedCategory}` : ""}
-      </h2>
+    <section className="card listingsWrap">
+      {/* Header row: title + tabs */}
+      <div className="listingsHeader">
+        <h2 className="sectionTitle listingsTitle">
+          Featured Listings
+          {selectedCategory !== "All" ? ` — ${selectedCategory}` : ""}
+        </h2>
 
+        <div className="listingsTabs">
+          {tabs.map((t) => (
+            <button
+              key={t}
+              type="button"
+              className={`miniPill ${selectedCategory === t ? "active" : ""}`}
+              onClick={() => onSelectCategory?.(t)}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Content */}
       {listings.length === 0 ? (
         <div className="emptyState">
           <div className="emptyTitle">No listings found</div>
@@ -29,7 +53,9 @@ export default function Listings({ listings = defaultListings, selectedCategory 
               </div>
 
               <div className="cardActions">
-                <button className="btn" type="button">View Item</button>
+                <button className="btn" type="button">
+                  View Item
+                </button>
               </div>
             </div>
           ))}
