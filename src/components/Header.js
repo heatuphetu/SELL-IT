@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Header() {
   return (
     <header className="siteHeader">
@@ -8,22 +10,28 @@ export default function Header() {
         </div>
 
         <form className="searchForm" onSubmit={(e) => e.preventDefault()}>
-          <input className="searchInput" type="text" placeholder="Search for anything" />
-          <button className="btn" type="submit">Search</button>
+          <input
+            className="searchInput"
+            type="text"
+            placeholder="Search for anything"
+          />
+          <button className="btn" type="submit">
+            Search
+          </button>
         </form>
       </div>
 
       <nav className="navBar">
         <div className="container navInner">
-          <a className="navLink" href="/">Home</a>
-          <a className="navLink" href="/browse">Browse</a>
-          <a className="navLink" href="/sell">Sell</a>
-          <a className="navLink" href="/notifications">Notifications</a>
+          <Link className="navLink" to="/">Home</Link>
+          <Link className="navLink" to="/browse">Browse</Link>
+          <Link className="navLink" to="/sell">Sell</Link>
+          <Link className="navLink" to="/notifications">Notifications</Link>
 
           <div className="navSpacer" />
 
-          <a className="navLink" href="/login">Login</a>
-          <a className="navLink" href="/signup">Sign Up</a>
+          <Link className="navLink" to="/login">Login</Link>
+          <Link className="navLink" to="/signup">Sign Up</Link>
         </div>
       </nav>
     </header>

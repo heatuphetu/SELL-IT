@@ -1,22 +1,32 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
-import Categories from "./components/Categories";
-import Listings from "./components/Listings";
 import Footer from "./components/Footer";
+
+import HomePage from "./pages/HomePage";
+import BrowsePage from "./pages/BrowsePage";
+import SellPage from "./pages/SellPage";
+import NotificationsPage from "./pages/NotificationsPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
   return (
-    <div>
+    <BrowserRouter>
       <Header />
 
-      <main className="container">
-        <div className="pageGrid">
-          <Categories />
-          <Listings />
-        </div>
+      <main className="container" style={{ padding: "18px 0 26px" }}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/browse" element={<BrowsePage />} />
+          <Route path="/sell" element={<SellPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+        </Routes>
       </main>
 
       <Footer />
-    </div>
+    </BrowserRouter>
   );
 }
 
