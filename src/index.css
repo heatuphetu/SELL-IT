@@ -394,3 +394,59 @@ hr {
   .headerTop { flex-direction: column; align-items: stretch; }
   .searchForm { width: 100%; }
 }
+/* ===== Hero carousel controls ===== */
+
+.heroBadge {
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(17,24,39,0.15);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.heroBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.dotBtn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+.dotBtn .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(17,24,39,0.25);
+  display: inline-block;
+}
+.dotBtn.active .dot {
+  background: rgba(17,24,39,0.95);
+}
+
+.heroControls {
+  display: flex;
+  gap: 8px;
+}
+
+.heroCtrl {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(17,24,39,0.25);
+  background: rgba(255,255,255,0.25);
+  color: #111827;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+.heroCtrl:hover {
+  background: rgba(255,255,255,0.35);
+}
+
