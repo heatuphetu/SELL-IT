@@ -21,14 +21,15 @@ export default function Header() {
 
       <div className="container headerTop">
         <div>
-          <div className="brandTitle">SellIt</div>
+          <div className="brandTitle">
+          <span className="brandSell">Sell</span>
+          <span className="brandIt">it</span>
+          </div>
+
           <div className="brandTagline">Your Online Marketplace</div>
         </div>
 
-        <form className="searchForm" onSubmit={(e) => e.preventDefault()}>
-          <input className="searchInput" type="text" placeholder="Search for anything" />
-          <button className="btn" type="submit">Search</button>
-        </form>
+        
       </div>
 
       <nav className="navBar">

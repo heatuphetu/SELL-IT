@@ -1,3 +1,4 @@
+// src/data/listings.js
 export const listings = [
   {
     id: 1,
@@ -6,6 +7,8 @@ export const listings = [
     condition: "Used",
     delivery: "Shipping & Pickup",
     category: "Electronics",
+    saved: true,
+    isAuction: false,
   },
   {
     id: 2,
@@ -14,5 +17,7 @@ export const listings = [
     condition: "New",
     delivery: "Pickup Only",
     category: "Sporting Goods",
+    saved: false,
+    isAuction: true,
   },
 ];

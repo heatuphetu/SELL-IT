@@ -88,3 +88,22 @@
   text-decoration: none;
 }
 
+
+.brandTitle {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: baseline;
+}
+
+/* "Sell" part */
+.brandSell {
+  color: var(--text); /* default text color */
+}
+
+/* "it" part */
+.brandIt {
+  color: var(--brand); /* accent / brand color */
+  margin-left: 2px;
+}

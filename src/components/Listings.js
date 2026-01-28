@@ -1,28 +1,32 @@
-import { categories } from "../data/categories";
+// src/components/Listings.js
+import { categories as baseCategories } from "../data/categories";
 
 export default function Listings({
   listings = [],
   selectedCategory = "All",
   onSelectCategory,
 }) {
-  const tabs = ["All", "Saved", "Top Auctions", ...categories];
+  const tabs = ["All", "Saved", "Top Auctions", ...baseCategories];
 
   return (
-    <section className="card listingsWrap">
-      {/* Header row: title + tabs */}
+    <section className="card listingsWrap" id="listings">
       <div className="listingsHeader">
-        <h2 className="sectionTitle listingsTitle">
-          Featured Listings
-          {selectedCategory !== "All" ? ` — ${selectedCategory}` : ""}
-        </h2>
+        <div>
+          <h2 className="sectionTitle listingsTitle">
+            Featured Listings{selectedCategory !== "All" ? ` — ${selectedCategory}` : ""}
+          </h2>
+          <p className="listingsSubtitle">Popular picks across categories.</p>
+        </div>
 
-        <div className="listingsTabs">
+        <div className="listingsTabs" role="tablist" aria-label="Listing categories">
           {tabs.map((t) => (
             <button
               key={t}
               type="button"
               className={`miniPill ${selectedCategory === t ? "active" : ""}`}
               onClick={() => onSelectCategory?.(t)}
+              role="tab"
+              aria-selected={selectedCategory === t}
             >
               {t}
             </button>
@@ -30,7 +34,6 @@ export default function Listings({
         </div>
       </div>
 
-      {/* Content */}
       {listings.length === 0 ? (
         <div className="emptyState">
           <div className="emptyTitle">No listings found</div>
@@ -41,7 +44,7 @@ export default function Listings({
       ) : (
         <div className="listingGrid">
           {listings.map((item) => (
-            <div key={item.id} className="card listingCard">
+            <article key={item.id} className="card listingCard">
               <div className="listingTitle">{item.title}</div>
 
               <div className="meta">Price: ${item.price}</div>
@@ -50,6 +53,7 @@ export default function Listings({
               <div className="badgeRow">
                 <span className="badge">{item.delivery}</span>
                 {item.category && <span className="badge">{item.category}</span>}
+                {item.isAuction && <span className="badge">Auction</span>}
               </div>
 
               <div className="cardActions">
@@ -57,7 +61,7 @@ export default function Listings({
                   View Item
                 </button>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       )}

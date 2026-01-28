@@ -45,15 +45,15 @@ export default function Hero({ onSelectCategory, onJumpToListings }) {
   );
 
   const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
 
+  // Auto-slide every 2 seconds (no hover pause)
   useEffect(() => {
-    if (paused) return;
     const t = setInterval(() => {
       setIndex((p) => (p + 1) % slides.length);
-    }, 3500);
+    }, 2000);
+
     return () => clearInterval(t);
-  }, [paused, slides.length]);
+  }, [slides.length]);
 
   const current = slides[index];
 
@@ -67,11 +67,7 @@ export default function Hero({ onSelectCategory, onJumpToListings }) {
   };
 
   return (
-    <section
-      className="heroReal"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
+    <section className="heroReal">
       <div className="heroRealInner">
         <div className="heroRealText">
           <div className="heroTag">{current.category}</div>
@@ -101,20 +97,13 @@ export default function Hero({ onSelectCategory, onJumpToListings }) {
           ))}
         </div>
 
+        {/* Keep only left/right arrows */}
         <div className="heroControls">
           <button className="heroCtrlBtn" type="button" onClick={prev} aria-label="Previous">
             ‹
           </button>
           <button className="heroCtrlBtn" type="button" onClick={next} aria-label="Next">
             ›
-          </button>
-          <button
-            className="heroCtrlBtn"
-            type="button"
-            onClick={() => setPaused((p) => !p)}
-            aria-label={paused ? "Play" : "Pause"}
-          >
-            {paused ? "▶" : "Ⅱ"}
           </button>
         </div>
       </div>

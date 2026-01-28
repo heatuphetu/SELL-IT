@@ -1,3 +1,4 @@
+// src/pages/HomePage.js
 import { useMemo, useRef, useState } from "react";
 
 import Hero from "../components/Hero";
@@ -13,6 +14,8 @@ export default function HomePage() {
 
   const filteredListings = useMemo(() => {
     if (selectedCategory === "All") return allListings;
+    if (selectedCategory === "Saved") return allListings.filter((x) => x.saved);
+    if (selectedCategory === "Top Auctions") return allListings.filter((x) => x.isAuction);
     return allListings.filter(
       (x) => (x.category || "").toLowerCase() === selectedCategory.toLowerCase()
     );
@@ -23,22 +26,19 @@ export default function HomePage() {
   };
 
   return (
-  <>
-    <Hero
-      onSelectCategory={setSelectedCategory}
-      onJumpToListings={jumpToListings}
-    />
+    <>
+      <Hero onSelectCategory={setSelectedCategory} onJumpToListings={jumpToListings} />
 
-    <div ref={listingsRef}>
-      <Listings
-        listings={filteredListings}
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
-      />
-    </div>
+      <div ref={listingsRef}>
+        <Listings
+          listings={filteredListings}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+        />
+      </div>
 
-    <FeatureRow onSelectCategory={setSelectedCategory} />
-    <PromoStrip />
-  </>
-);
+      <FeatureRow onSelectCategory={setSelectedCategory} />
+      <PromoStrip />
+    </>
+  );
 }
