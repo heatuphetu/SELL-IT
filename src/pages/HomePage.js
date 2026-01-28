@@ -23,22 +23,22 @@ export default function HomePage() {
   };
 
   return (
-    <div className="container">
-      <Hero
+  <>
+    <Hero
+      onSelectCategory={setSelectedCategory}
+      onJumpToListings={jumpToListings}
+    />
+
+    <div ref={listingsRef}>
+      <Listings
+        listings={filteredListings}
+        selectedCategory={selectedCategory}
         onSelectCategory={setSelectedCategory}
-        onJumpToListings={jumpToListings}
       />
-
-      <div ref={listingsRef}>
-        <Listings
-          listings={filteredListings}
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
-      </div>
-
-      <FeatureRow onSelectCategory={setSelectedCategory} />
-      <PromoStrip />
     </div>
-  );
+
+    <FeatureRow onSelectCategory={setSelectedCategory} />
+    <PromoStrip />
+  </>
+);
 }

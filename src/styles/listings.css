@@ -1,0 +1,81 @@
+.listingsWrap { padding: 14px; margin: 14px 0; }
+
+.listingsHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.listingsTitle {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.listingsTabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+  max-width: 70%;
+}
+.listingsTabs::-webkit-scrollbar { display: none; }
+
+.miniPill {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.miniPill:hover { background: #f3f4f6; }
+.miniPill.active {
+  border-color: var(--brand);
+  color: var(--brand);
+  font-weight: 800;
+}
+
+.emptyState {
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  background: #fff;
+}
+.emptyTitle { font-weight: 800; font-size: 16px; margin-bottom: 6px; }
+.emptyDesc { color: var(--muted); font-size: 14px; }
+
+.listingGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.listingCard { padding: 14px; }
+.listingTitle {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.meta { margin: 6px 0; color: var(--muted); font-size: 14px; }
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 12px;
+}
+.badge {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--muted);
+}
+
+.cardActions { display: flex; gap: 10px; }

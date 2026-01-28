@@ -1,0 +1,1586 @@
+
+
+===== src/App.css =====
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+===== src/App.js =====
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+
+import HomePage from "./pages/HomePage";
+import BrowsePage from "./pages/BrowsePage";
+import SellPage from "./pages/SellPage";
+import NotificationsPage from "./pages/NotificationsPage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+
+
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Header />
+
+      <main className="container" style={{ padding: "18px 0 26px" }}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/browse" element={<BrowsePage />} />
+          <Route path="/sell" element={<SellPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+        </Routes>
+      </main>
+
+      <Footer />
+    </BrowserRouter>
+  );
+}
+
+export default App;
+
+
+===== src/App.test.js =====
+
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+test('renders learn react link', () => {
+  render(<App />);
+  const linkElement = screen.getByText(/learn react/i);
+  expect(linkElement).toBeInTheDocument();
+});
+
+
+===== src/components/Categories.js =====
+
+import { categories } from "../data/categories";
+
+export default function CategoryBar() {
+  return (
+    <div className="catBar">
+      <div className="container catBarInner">
+        <button className="catPill active" type="button">Saved</button>
+        <button className="catPill" type="button">Top Auctions</button>
+
+        {categories.map((c) => (
+          <button key={c} className="catPill" type="button">
+            {c}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+===== src/components/CategoryBar.js =====
+
+import { useEffect, useRef } from "react";
+import { categories } from "../data/categories";
+
+export default function CategoryBar({ selected = "All", onSelect }) {
+  const scrollerRef = useRef(null);
+
+  const items = ["All", "Saved", "Top Auctions", ...categories];
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    const active = scroller.querySelector('[data-active="true"]');
+    if (!active) return;
+
+    active.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }, [selected]);
+
+  return (
+    <div className="catBar">
+      <div ref={scrollerRef} className="container catBarInner">
+        {items.map((label) => {
+          const isActive = selected === label;
+          return (
+            <button
+              key={label}
+              className={`catPill ${isActive ? "active" : ""}`}
+              data-active={isActive ? "true" : "false"}
+              type="button"
+              onClick={() => onSelect?.(label)}
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+
+===== src/components/FeatureRow.js =====
+
+const tiles = [
+  { id: "fashion", label: "Fashion", emoji: "👗" },
+  { id: "electronics", label: "Electronics", emoji: "📱" },
+  { id: "home-garden", label: "Home & Garden", emoji: "🏡" },
+  { id: "collectibles", label: "Collectibles", emoji: "🧸" },
+  { id: "trading-cards", label: "Trading Cards", emoji: "🃏" },
+  { id: "motors", label: "Motors", emoji: "🚗" },
+  { id: "sporting-goods", label: "Sporting Goods", emoji: "🏀" },
+];
+
+export default function FeatureRow({ onSelectCategory }) {
+  return (
+    <section className="featureRow">
+      <h3 className="featureTitle">Shop by category</h3>
+
+      <div className="featureGrid">
+        {tiles.map((x) => (
+          <button
+            key={x.id}
+            className="featureItem"
+            type="button"
+            onClick={() => onSelectCategory?.(x.label)}
+            aria-label={`Filter by ${x.label}`}
+          >
+            <div className="featureCircle">
+              <span className="featureEmoji">{x.emoji}</span>
+            </div>
+            <div className="featureLabel">{x.label}</div>
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+
+===== src/components/Footer.js =====
+
+export default function Footer() {
+  return (
+    <footer className="siteFooter">
+      <div className="container">© 2026 SellIt. All rights reserved.</div>
+    </footer>
+  );
+}
+
+
+===== src/components/Header.js =====
+
+import { Link } from "react-router-dom";
+
+export default function Header() {
+  return (
+    <header className="siteHeader">
+      <div className="topBar">
+        <div className="container topBarInner">
+          <div className="topLeft">
+            Hi! <Link className="topLink" to="/login">Sign in</Link> or{" "}
+            <Link className="topLink" to="/signup">register</Link>
+          </div>
+
+          <div className="topRight">
+            <Link className="topLink" to="/sell">Sell</Link>
+            <span className="topSep">|</span>
+            <button className="iconBtn" type="button" aria-label="Notifications">🔔</button>
+            <button className="iconBtn" type="button" aria-label="Cart">🛒</button>
+          </div>
+        </div>
+      </div>
+
+      <div className="container headerTop">
+        <div>
+          <div className="brandTitle">SellIt</div>
+          <div className="brandTagline">Your Online Marketplace</div>
+        </div>
+
+        <form className="searchForm" onSubmit={(e) => e.preventDefault()}>
+          <input className="searchInput" type="text" placeholder="Search for anything" />
+          <button className="btn" type="submit">Search</button>
+        </form>
+      </div>
+
+      <nav className="navBar">
+        <div className="container navInner">
+          <Link className="navLink" to="/">Home</Link>
+          <Link className="navLink" to="/browse">Browse</Link>
+          <Link className="navLink" to="/sell">Sell</Link>
+          <Link className="navLink" to="/notifications">Notifications</Link>
+
+          <div className="navSpacer" />
+
+          <Link className="navLink" to="/login">Login</Link>
+          <Link className="navLink" to="/signup">Sign Up</Link>
+        </div>
+      </nav>
+    </header>
+  );
+}
+
+
+===== src/components/Hero.js =====
+
+import { useEffect, useMemo, useState } from "react";
+
+import imgElectronics from "../assets/hero/electronics.jpg";
+import imgFashion from "../assets/hero/fashion.jpg";
+import imgHome from "../assets/hero/home.jpg";
+import imgCards from "../assets/hero/cards.jpg";
+
+export default function Hero({ onSelectCategory, onJumpToListings }) {
+  const slides = useMemo(
+    () => [
+      {
+        id: "electronics",
+        category: "Electronics",
+        title: "Upgrade your tech for less.",
+        desc: "Phones, laptops, accessories — deals from local sellers.",
+        cta: "Shop Electronics",
+        img: imgElectronics,
+      },
+      {
+        id: "fashion",
+        category: "Fashion",
+        title: "New fits. Better prices.",
+        desc: "Trending styles — buy now or make an offer.",
+        cta: "Shop Fashion",
+        img: imgFashion,
+      },
+      {
+        id: "home-garden",
+        category: "Home & Garden",
+        title: "Make your space feel new.",
+        desc: "Furniture, decor, tools — shipped or pickup nearby.",
+        cta: "Shop Home & Garden",
+        img: imgHome,
+      },
+      {
+        id: "trading-cards",
+        category: "Trading Cards",
+        title: "Pull your next favorite card.",
+        desc: "Singles and sealed packs across top series.",
+        cta: "Shop Trading Cards",
+        img: imgCards,
+      },
+    ],
+    []
+  );
+
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused) return;
+    const t = setInterval(() => {
+      setIndex((p) => (p + 1) % slides.length);
+    }, 3500);
+    return () => clearInterval(t);
+  }, [paused, slides.length]);
+
+  const current = slides[index];
+
+  const goTo = (i) => setIndex(i);
+  const next = () => setIndex((p) => (p + 1) % slides.length);
+  const prev = () => setIndex((p) => (p - 1 + slides.length) % slides.length);
+
+  const handleCTA = () => {
+    onSelectCategory?.(current.category);
+    onJumpToListings?.();
+  };
+
+  return (
+    <section
+      className="heroReal"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div className="heroRealInner">
+        <div className="heroRealText">
+          <div className="heroTag">{current.category}</div>
+          <h1 className="heroRealTitle">{current.title}</h1>
+          <p className="heroRealDesc">{current.desc}</p>
+
+          <button className="btn heroRealBtn" type="button" onClick={handleCTA}>
+            {current.cta}
+          </button>
+        </div>
+
+        <div className="heroRealMedia">
+          <img className="heroImg" src={current.img} alt={current.category} />
+        </div>
+      </div>
+
+      <div className="heroRealBottom">
+        <div className="heroDots">
+          {slides.map((s, i) => (
+            <button
+              key={s.id}
+              type="button"
+              className={`heroDot ${i === index ? "active" : ""}`}
+              onClick={() => goTo(i)}
+              aria-label={`Go to ${s.category}`}
+            />
+          ))}
+        </div>
+
+        <div className="heroControls">
+          <button className="heroCtrlBtn" type="button" onClick={prev} aria-label="Previous">
+            ‹
+          </button>
+          <button className="heroCtrlBtn" type="button" onClick={next} aria-label="Next">
+            ›
+          </button>
+          <button
+            className="heroCtrlBtn"
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            aria-label={paused ? "Play" : "Pause"}
+          >
+            {paused ? "▶" : "Ⅱ"}
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+===== src/components/Listings.js =====
+
+import { categories } from "../data/categories";
+
+export default function Listings({
+  listings = [],
+  selectedCategory = "All",
+  onSelectCategory,
+}) {
+  const tabs = ["All", "Saved", "Top Auctions", ...categories];
+
+  return (
+    <section className="card listingsWrap">
+      {/* Header row: title + tabs */}
+      <div className="listingsHeader">
+        <h2 className="sectionTitle listingsTitle">
+          Featured Listings
+          {selectedCategory !== "All" ? ` — ${selectedCategory}` : ""}
+        </h2>
+
+        <div className="listingsTabs">
+          {tabs.map((t) => (
+            <button
+              key={t}
+              type="button"
+              className={`miniPill ${selectedCategory === t ? "active" : ""}`}
+              onClick={() => onSelectCategory?.(t)}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Content */}
+      {listings.length === 0 ? (
+        <div className="emptyState">
+          <div className="emptyTitle">No listings found</div>
+          <div className="emptyDesc">
+            Try another category or switch back to <b>All</b>.
+          </div>
+        </div>
+      ) : (
+        <div className="listingGrid">
+          {listings.map((item) => (
+            <div key={item.id} className="card listingCard">
+              <div className="listingTitle">{item.title}</div>
+
+              <div className="meta">Price: ${item.price}</div>
+              <div className="meta">Condition: {item.condition}</div>
+
+              <div className="badgeRow">
+                <span className="badge">{item.delivery}</span>
+                {item.category && <span className="badge">{item.category}</span>}
+              </div>
+
+              <div className="cardActions">
+                <button className="btn" type="button">
+                  View Item
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+
+===== src/components/PromoStrip.js =====
+
+export default function PromoStrip() {
+  return (
+    <section className="promoStrip">
+      <div>
+        <div className="promoTitle">No fakes. No fraud. No doubt.</div>
+        <div className="promoDesc">
+          Expand your collection confidently with authenticity checks.
+        </div>
+      </div>
+
+      <button className="promoBtn" type="button">Learn more</button>
+    </section>
+  );
+}
+
+
+
+===== src/components/SearchBar.js =====
+
+export default function SearchBar() {
+  return (
+    <section>
+      <h2>Search Items</h2>
+      <form onSubmit={(e) => e.preventDefault()}>
+        <input type="text" placeholder="Search for anything" />
+        <button type="submit">Search</button>
+      </form>
+    </section>
+  );
+}
+
+
+===== src/data/categories.js =====
+
+export const categories = [
+  "Motors",
+  "Trading Cards",
+  "Collectibles",
+  "Refurbished",
+  "Fashion",
+  "Electronics",
+  "Sporting Goods",
+  "Toys & Hobbies",
+  "Business & Industrial",
+  "Home & Garden",
+];
+
+
+===== src/data/listings.js =====
+
+export const listings = [
+  {
+    id: 1,
+    title: "iPhone 13 Pro",
+    price: 800,
+    condition: "Used",
+    delivery: "Shipping & Pickup",
+    category: "Electronics",
+  },
+  {
+    id: 2,
+    title: "Gaming Chair",
+    price: 150,
+    condition: "New",
+    delivery: "Pickup Only",
+    category: "Sporting Goods",
+  },
+];
+
+
+===== src/index.css =====
+
+/* ===== SellIt Global Styles (BASE) ===== */
+
+:root {
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --brand: #111827;
+  --brandText: #ffffff;
+  --shadow: 0 10px 25px rgba(17, 24, 39, 0.08);
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* Links */
+a {
+  color: var(--text);
+  text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+/* Basic layout helpers */
+.container {
+  width: min(1100px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.sectionTitle {
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 18px 0;
+}
+
+/* Header */
+.siteHeader {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.brandTitle {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.brandTagline {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.navBar {
+  border-top: 1px solid var(--border);
+  background: #fff;
+}
+
+.navInner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+}
+
+.navSpacer { flex: 1; }
+
+.navLink {
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+.navLink:hover {
+  background: #f3f4f6;
+  text-decoration: none;
+}
+
+/* Search */
+.searchForm {
+  display: flex;
+  gap: 10px;
+  width: min(560px, 100%);
+}
+
+.searchInput {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  outline: none;
+}
+.searchInput:focus {
+  border-color: #c7cdd6;
+  box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.08);
+}
+
+.btn {
+  padding: 10px 14px;
+  border: 1px solid var(--brand);
+  border-radius: 12px;
+  background: var(--brand);
+  color: var(--brandText);
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn:hover { opacity: 0.92; }
+
+/* Categories */
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.catItem {
+  padding: 10px 10px;
+  border-radius: 12px;
+  color: var(--text);
+}
+.catItem:hover {
+  background: #f3f4f6;
+}
+
+/* Listings */
+.listingGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.listingCard {
+  padding: 14px;
+}
+
+.listingTitle {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.meta {
+  margin: 6px 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 12px;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--muted);
+}
+
+.cardActions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Footer */
+.siteFooter {
+  border-top: 1px solid var(--border);
+  background: #fff;
+  padding: 16px 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ===== eBay-like homepage additions ===== */
+
+.topBar {
+  background: #0b1220;
+  color: #cbd5e1;
+  font-size: 13px;
+}
+.topBarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+.topLink { color: #e5e7eb; text-decoration: underline; }
+.topRight { display: flex; align-items: center; gap: 10px; }
+.topSep { opacity: 0.5; }
+
+.iconBtn {
+  border: 1px solid rgba(255,255,255,0.2);
+  background: transparent;
+  color: #e5e7eb;
+  border-radius: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.iconBtn:hover { background: rgba(255,255,255,0.08); }
+
+/* Category pill bar */
+.catBar {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+.catBarInner {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+.catPill {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.catPill:hover { background: #f3f4f6; }
+.catPill.active {
+  border-color: var(--brand);
+  color: var(--brand);
+  font-weight: 700;
+}
+
+/* Hero */
+.hero {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  overflow: hidden;
+  margin: 18px 0;
+  min-height: 220px;
+}
+.heroLeft {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+}
+.heroImgBox {
+  width: 240px;
+  height: 180px;
+  border-radius: 18px;
+  border: 1px dashed #cbd5e1;
+  display: grid;
+  place-items: center;
+}
+.heroImgPlaceholder {
+  color: #64748b;
+  font-weight: 700;
+}
+.heroRight {
+  background: #ff6a2b;
+  color: #111827;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+.heroTitle {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.05;
+  letter-spacing: -0.8px;
+}
+.heroDesc {
+  margin: 0;
+  max-width: 520px;
+  opacity: 0.9;
+}
+.heroBtn { width: fit-content; }
+
+.heroDots {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(17,24,39,0.25);
+}
+.dot.active { background: rgba(17,24,39,0.9); }
+
+/* Home grid (sidebar + listings) */
+.homeGrid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 16px;
+  padding: 4px 0 18px;
+}
+
+/* Feature row */
+.featureRow { padding: 8px 0 16px; }
+.featureTitle {
+  margin: 10px 0 12px;
+  font-size: 22px;
+}
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 14px;
+}
+.featureItem {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: center;
+}
+.featureCircle {
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  margin: 0 auto 10px;
+}
+.featureLabel {
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Promo strip */
+.promoStrip {
+  margin: 10px 0 18px;
+  background: #111827;
+  color: #fff;
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.promoTitle { font-size: 20px; font-weight: 800; }
+.promoDesc { opacity: 0.85; margin-top: 4px; }
+
+.promoBtn {
+  border: 1px solid rgba(255,255,255,0.25);
+  background: #fff;
+  color: #111827;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.promoBtn:hover { opacity: 0.92; }
+
+/* Responsive */
+@media (max-width: 980px) {
+  .hero { grid-template-columns: 1fr; }
+  .homeGrid { grid-template-columns: 1fr; }
+  .featureGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .listingGrid { grid-template-columns: 1fr; }
+  .headerTop { flex-direction: column; align-items: stretch; }
+  .searchForm { width: 100%; }
+}
+/* ===== Hero carousel controls ===== */
+
+.heroBadge {
+  width: fit-content;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(17,24,39,0.15);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.heroBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.dotBtn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+.dotBtn .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(17,24,39,0.25);
+  display: inline-block;
+}
+.dotBtn.active .dot {
+  background: rgba(17,24,39,0.95);
+}
+
+.heroControls {
+  display: flex;
+  gap: 8px;
+}
+
+.heroCtrl {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(17,24,39,0.25);
+  background: rgba(255,255,255,0.25);
+  color: #111827;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+.heroCtrl:hover {
+  background: rgba(255,255,255,0.35);
+}
+/* ===== Mobile responsiveness fixes ===== */
+
+/* Prevent horizontal scrolling on small screens */
+html, body { overflow-x: hidden; }
+
+/* Container should be fluid on mobile */
+.container {
+  width: min(1100px, calc(100% - 24px));
+  margin: 0 auto;
+}
+
+/* Header: stack nicely */
+@media (max-width: 820px) {
+  .headerTop {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .searchForm { width: 100%; }
+}
+
+/* Category pills: keep scrollable and usable */
+.catBarInner {
+  scrollbar-width: none; /* Firefox */
+}
+.catBarInner::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Hero: make it fluid + avoid huge orange area */
+@media (max-width: 820px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: unset;
+  }
+  .heroLeft {
+    padding: 14px 0;
+  }
+  .heroImgBox {
+    width: min(92%, 520px);
+    height: 160px;
+  }
+  .heroRight {
+    padding: 16px;
+  }
+  .heroTitle {
+    font-size: 26px;
+  }
+}
+
+/* Featured listings: 2 columns on medium, 1 on phone */
+@media (max-width: 980px) {
+  .listingGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .listingGrid { grid-template-columns: 1fr; }
+  .listingCard { padding: 12px; }
+}
+
+/* Feature row: use auto-fit so circles never overlap */
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 980px) {
+  .featureGrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .featureGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .featureCircle { width: 78px; height: 78px; }
+}
+
+/* Promo strip: stack button under text on mobile */
+@media (max-width: 620px) {
+  .promoStrip {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ===== FeatureRow nicer (not tech-only) ===== */
+
+.featureTitle {
+  margin: 18px 0 14px;
+  font-size: 26px;
+  letter-spacing: -0.4px;
+}
+
+.featureItem {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: center;
+  padding: 6px 4px;
+}
+
+.featureCircle {
+  width: 108px;
+  height: 108px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  margin: 0 auto 12px;
+  display: grid;
+  place-items: center;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.featureEmoji {
+  font-size: 34px;
+}
+
+.featureItem:hover .featureCircle {
+  transform: translateY(-2px);
+  background: #dfe3ea;
+  box-shadow: 0 10px 22px rgba(17, 24, 39, 0.12);
+}
+
+.featureLabel {
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .featureGrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .featureCircle { width: 96px; height: 96px; }
+}
+@media (max-width: 620px) {
+  .featureGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .featureCircle { width: 88px; height: 88px; }
+  .featureEmoji { font-size: 30px; }
+}
+.emptyState {
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  background: #fff;
+}
+.emptyTitle {
+  font-weight: 800;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+.emptyDesc {
+  color: var(--muted);
+  font-size: 14px;
+}
+/* ===== Listings header tabs ===== */
+
+.listingsWrap {
+  padding: 14px;
+}
+
+.listingsHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.listingsTitle {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.listingsTabs {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+  max-width: 70%;
+}
+
+.listingsTabs::-webkit-scrollbar {
+  display: none;
+}
+
+.miniPill {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.miniPill:hover {
+  background: #f3f4f6;
+}
+
+.miniPill.active {
+  border-color: var(--brand);
+  color: var(--brand);
+  font-weight: 800;
+}
+
+/* Mobile: stack title above tabs */
+@media (max-width: 720px) {
+  .listingsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .listingsTabs {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+/* ===== Hero V2 (eBay-like) ===== */
+
+.heroV2 {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 22px;
+  margin: 18px 0;
+  overflow: hidden;
+}
+
+.heroV2Inner {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 18px;
+  align-items: center;
+  min-height: 220px;
+}
+
+.heroV2Title {
+  margin: 0 0 10px;
+  font-size: 56px;
+  line-height: 1.0;
+  letter-spacing: -1px;
+}
+
+.heroV2Desc {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.heroV2Btn {
+  border-radius: 999px;
+  padding: 12px 18px;
+}
+
+.heroV2Media {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.heroV2MockImg {
+  width: min(520px, 100%);
+  height: 200px;
+  border-radius: 18px;
+  background: #f3f4f6;
+  border: 1px dashed #cbd5e1;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: #64748b;
+}
+
+.heroV2Bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  gap: 12px;
+}
+
+.heroV2Dots {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.heroDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 2px solid rgba(17,24,39,0.35);
+  background: transparent;
+  cursor: pointer;
+}
+.heroDot.active {
+  background: rgba(17,24,39,0.9);
+  border-color: rgba(17,24,39,0.9);
+}
+
+.heroV2Controls {
+  display: flex;
+  gap: 10px;
+}
+
+.heroCtrlBtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  cursor: pointer;
+  font-size: 20px;
+}
+.heroCtrlBtn:hover {
+  background: #f3f4f6;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .heroV2Title { font-size: 44px; }
+  .heroV2Inner { grid-template-columns: 1fr; }
+  .heroV2Media { justify-content: flex-start; }
+  .heroV2MockImg { height: 180px; }
+}
+
+@media (max-width: 620px) {
+  .heroV2Title { font-size: 34px; }
+  .heroV2 { padding: 16px; }
+  .heroCtrlBtn { width: 38px; height: 38px; }
+}
+/* ===== Realistic marketplace hero ===== */
+
+.heroReal {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+  padding: 22px;
+  margin: 18px 0;
+  overflow: hidden;
+}
+
+.heroRealInner {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 18px;
+  align-items: center;
+}
+
+.heroTag {
+  width: fit-content;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(17,24,39,0.08);
+  font-weight: 800;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.heroRealTitle {
+  margin: 0 0 10px;
+  font-size: 52px;
+  line-height: 1.02;
+  letter-spacing: -1px;
+}
+
+.heroRealDesc {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.heroRealBtn {
+  border-radius: 999px;
+  padding: 12px 18px;
+}
+
+.heroRealMedia {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.heroImg {
+  width: 100%;
+  max-width: 560px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 1px solid rgba(17,24,39,0.10);
+}
+
+.heroRealBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  gap: 12px;
+}
+
+.heroDots {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.heroDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 2px solid rgba(17,24,39,0.35);
+  background: transparent;
+  cursor: pointer;
+}
+
+.heroDot.active {
+  background: rgba(17,24,39,0.92);
+  border-color: rgba(17,24,39,0.92);
+}
+
+.heroControls {
+  display: flex;
+  gap: 10px;
+}
+
+.heroCtrlBtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: #fff;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.heroCtrlBtn:hover {
+  background: #f3f4f6;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .heroRealInner { grid-template-columns: 1fr; }
+  .heroRealTitle { font-size: 40px; }
+  .heroImg { height: 200px; }
+}
+
+@media (max-width: 620px) {
+  .heroReal { padding: 16px; }
+  .heroRealTitle { font-size: 32px; }
+  .heroCtrlBtn { width: 38px; height: 38px; }
+}
+
+
+===== src/index.js =====
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
+
+
+===== src/pages/BrowsePage.js =====
+
+export default function BrowsePage() {
+  return (
+    <div className="card" style={{ padding: 14 }}>
+      <h2 className="sectionTitle">Browse</h2>
+      <p className="meta">Browse listings (coming next).</p>
+    </div>
+  );
+}
+
+
+===== src/pages/HomePage.js =====
+
+import { useMemo, useRef, useState } from "react";
+
+import Hero from "../components/Hero";
+import FeatureRow from "../components/FeatureRow";
+import PromoStrip from "../components/PromoStrip";
+import Listings from "../components/Listings";
+
+import { listings as allListings } from "../data/listings";
+
+export default function HomePage() {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const listingsRef = useRef(null);
+
+  const filteredListings = useMemo(() => {
+    if (selectedCategory === "All") return allListings;
+    return allListings.filter(
+      (x) => (x.category || "").toLowerCase() === selectedCategory.toLowerCase()
+    );
+  }, [selectedCategory]);
+
+  const jumpToListings = () => {
+    listingsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  return (
+    <div className="container">
+      <Hero
+        onSelectCategory={setSelectedCategory}
+        onJumpToListings={jumpToListings}
+      />
+
+      <div ref={listingsRef}>
+        <Listings
+          listings={filteredListings}
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+        />
+      </div>
+
+      <FeatureRow onSelectCategory={setSelectedCategory} />
+      <PromoStrip />
+    </div>
+  );
+}
+
+
+===== src/pages/LoginPage.js =====
+
+export default function LoginPage() {
+  return (
+    <div className="card" style={{ padding: 14 }}>
+      <h2 className="sectionTitle">Login</h2>
+      <p className="meta">Login form (coming next).</p>
+    </div>
+  );
+}
+
+
+===== src/pages/NotificationsPage.js =====
+
+export default function NotificationsPage() {
+  return (
+    <div className="card" style={{ padding: 14 }}>
+      <h2 className="sectionTitle">Notifications</h2>
+      <p className="meta">Your notifications will show here.</p>
+    </div>
+  );
+}
+
+
+===== src/pages/SellPage.js =====
+
+export default function SellPage() {
+  return (
+    <div className="card" style={{ padding: 14 }}>
+      <h2 className="sectionTitle">Sell</h2>
+      <p className="meta">Create a listing form (coming next).</p>
+    </div>
+  );
+}
+
+
+===== src/pages/SignupPage.js =====
+
+export default function SignupPage() {
+  return (
+    <div className="card" style={{ padding: 14 }}>
+      <h2 className="sectionTitle">Sign Up</h2>
+      <p className="meta">Signup form (coming next).</p>
+    </div>
+  );
+}
+
+
+===== src/reportWebVitals.js =====
+
+const reportWebVitals = onPerfEntry => {
+  if (onPerfEntry && onPerfEntry instanceof Function) {
+    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+      getCLS(onPerfEntry);
+      getFID(onPerfEntry);
+      getFCP(onPerfEntry);
+      getLCP(onPerfEntry);
+      getTTFB(onPerfEntry);
+    });
+  }
+};
+
+export default reportWebVitals;
+
+
+===== src/setupTests.js =====
+
+// jest-dom adds custom jest matchers for asserting on DOM nodes.
+// allows you to do things like:
+// expect(element).toHaveTextContent(/react/i)
+// learn more: https://github.com/testing-library/jest-dom
+import '@testing-library/jest-dom';

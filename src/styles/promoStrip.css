@@ -1,0 +1,24 @@
+.promoStrip {
+  margin: 10px 0 18px;
+  background: #111827;
+  color: #fff;
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.promoTitle { font-size: 20px; font-weight: 800; }
+.promoDesc { opacity: 0.85; margin-top: 4px; }
+
+.promoBtn {
+  border: 1px solid rgba(255,255,255,0.25);
+  background: #fff;
+  color: #111827;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.promoBtn:hover { opacity: 0.92; }

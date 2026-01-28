@@ -1,0 +1,29 @@
+.catBar {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+
+.catBarInner {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 0;
+  scrollbar-width: none;
+}
+.catBarInner::-webkit-scrollbar { display: none; }
+
+.catPill {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.catPill:hover { background: #f3f4f6; }
+.catPill.active {
+  border-color: var(--brand);
+  color: var(--brand);
+  font-weight: 700;
+}
